@@ -8,7 +8,6 @@ class Blog(models.Model):
     description = models.TextField(max_length=1024, blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    thumbnail = models.ImageField(upload_to='thumbnails/', null=False, blank=False)
     written_by = models.ForeignKey(User, on_delete=models.CASCADE)
     categories = models.ManyToManyField('Category', related_name='blogs')
 
@@ -23,4 +22,12 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Comment(models.Model):
+    uuid =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    blog = models.ForeignKey(Blog, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
 # Create your models here.
